@@ -154,7 +154,7 @@ function buildCompetitiveStrategy(run: BidForgeRun): CompetitiveStrategyPayload 
         posture: "Cloud specialist",
         threat: 74,
         likelyMessage: "Deep cloud-native tooling and direct platform expertise.",
-        counterMove: "Emphasize multivendor operations, 24x7 support, regulated controls, and HCLTech delivery scale."
+        counterMove: "Emphasize multivendor operations, 24x7 support, regulated controls, and global delivery scale."
       },
       {
         name: "Regional Low-Cost SI",
@@ -195,7 +195,7 @@ function buildCompetitiveStrategy(run: BidForgeRun): CompetitiveStrategyPayload 
         response: "Keep Finance as required gate and include explicit penalty-cap assumptions in the commercial response."
       },
       {
-        objection: "Does HCLTech have enough client-specific evidence?",
+        objection: "Does the delivery team have enough client-specific evidence?",
         risk: "Medium",
         response: "Use approved proposal-bank assets, anonymized banking migration case, and evidence drawer traceability."
       }

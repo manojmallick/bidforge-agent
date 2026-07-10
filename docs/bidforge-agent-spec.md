@@ -1,6 +1,6 @@
 # BidForge Agent
 
-Track: Agents/Agentic workflows for HCLTech internal operations  
+Track: Agents/Agentic workflows for enterprise bid operations  
 Domain: Sales, presales, legal, finance, delivery, proposal management  
 Winning Index: 97/100  
 Recommended build priority: Highest
@@ -11,10 +11,10 @@ BidForge turns a large RFP into a compliance matrix, proposal draft, risk regist
 
 ## 2. Why This Has A High Chance Of Winning
 
-Judges will care about measurable business value, demo clarity, HCLTech relevance, and agentic depth. BidForge is strong on all four.
+Judges will care about measurable business value, demo clarity, enterprise relevance, and agentic depth. BidForge is strong on all four.
 
 - Revenue impact: better and faster bid responses can directly influence deal velocity and win probability.
-- Internal relevance: maps cleanly to HCLTech sales, presales, legal, delivery, finance, and solution teams.
+- Internal relevance: maps cleanly to enterprise sales, presales, legal, delivery, finance, and solution teams.
 - Demo-friendly: upload one RFP and show structured outputs within a few screens.
 - Agentic workflow: multiple specialized agents collaborate, critique, and hand off work.
 - Production story: can start with a mocked knowledge base and later connect to SharePoint, CRM, proposal repositories, pricing tools, and approval workflows.
@@ -141,7 +141,7 @@ Output: matched offerings, accelerators, reusable responses
 
 Knowledge sources for demo:
 
-- HCLTech service catalog mock data
+- Enterprise service catalog mock data
 - Case study snippets
 - Reusable proposal answer bank
 - Security/compliance boilerplate
@@ -317,7 +317,7 @@ bidforge-agent/
           db.py
         data/
           demo_rfp.txt
-          hcl_service_catalog.json
+          enterprise_service_catalog.json
           proposal_answer_bank.json
           risk_rules.json
           judge_rubric.json
@@ -339,7 +339,7 @@ Use Google Stitch to create a work-focused enterprise dashboard, not a marketing
 
 ### Stitch Prompt
 
-Create a polished enterprise SaaS dashboard for "BidForge Agent", an HCLTech internal RFP response assistant. The app helps bid managers upload an RFP, extract requirements, generate a compliance matrix, draft proposal responses, identify risks, route SME tasks, and verify the output with an AI judge. Use a restrained professional design with dense but readable information, compact cards only for repeated records, no oversized hero section, no decorative blobs, no marketing copy. Layout should feel like a serious internal operations tool.
+Create a polished enterprise SaaS dashboard for "BidForge Agent", an enterprise RFP response assistant. The app helps bid managers upload an RFP, extract requirements, generate a compliance matrix, draft proposal responses, identify risks, route SME tasks, and verify the output with an AI judge. Use a restrained professional design with dense but readable information, compact cards only for repeated records, no oversized hero section, no decorative blobs, no marketing copy. Layout should feel like a serious internal operations tool.
 
 ### Visual Direction
 
@@ -427,7 +427,7 @@ Use mock evidence:
 - Case study: banking migration anonymized case
 - Boilerplate: support model, transition plan, incident management
 
-Important: label all data as demo/anonymized. Do not claim real HCLTech client metrics unless supplied by HCLTech.
+Important: label all data as demo/anonymized. Do not claim real client metrics unless supplied by the organization.
 
 ## 11. Token Consumption Strategy
 
@@ -657,7 +657,7 @@ POST /api/runs/{run_id}/evaluate
 ## 19. Winning Index Breakdown
 
 - Business value: 20/20
-- HCLTech relevance: 20/20
+- Enterprise relevance: 20/20
 - Demo clarity: 19/20
 - Agentic depth: 19/20
 - Production readiness: 19/20
@@ -683,6 +683,6 @@ POST /api/runs/{run_id}/evaluate
 - Verifies its own work through a judge model.
 - Designed for human approval, not blind automation.
 - Can be demoed with safe mock data.
-- Clear path to HCLTech internal adoption.
+- Clear path to enterprise adoption.
 - Adds an executive ROI and win-strategy layer, so it speaks to both technical and business judges.
 - Includes a prompt-injection defense moment, which makes the trust story concrete.

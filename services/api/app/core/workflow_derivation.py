@@ -159,7 +159,7 @@ def derive_executive_brief(
             f"verified {verified_count}, and flagged {gap_count} owner input item(s)."
         ),
         winThemes=[f"Position around {category.lower()} readiness" for category in categories[:3]]
-        or ["Position around governed delivery and reusable HCLTech accelerators."],
+        or ["Position around governed delivery and reusable enterprise accelerators."],
         majorRisks=[risk.title for risk in risks[:3]] or ["No material risks detected in the uploaded sample."],
         missingInputs=missing_inputs,
         confidenceLevel=confidence_level,

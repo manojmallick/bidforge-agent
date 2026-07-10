@@ -11,7 +11,7 @@
 
 BidForge Agent turns a complex enterprise RFP into a governed bid response workspace: compliance matrix, proposal draft, risk register, SME task routing, executive win brief, win strategy decisioning, ROI model, benchmark evidence, judge verification, automation history, and role-based approvals.
 
-It is built for HCLTech-style presales operations where bid managers, sales, legal, finance, delivery, security, and SMEs need to collaborate quickly without losing human approval control.
+It is built for enterprise presales operations where bid managers, sales, legal, finance, delivery, security, and SMEs need to collaborate quickly without losing human approval control.
 
 ## One-Line Pitch
 

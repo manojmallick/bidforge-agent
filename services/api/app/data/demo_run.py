@@ -46,7 +46,7 @@ def get_demo_run() -> BidForgeRun:
             ),
             winThemes=[
                 "Lead with CloudSMART migration factory and wave planning discipline.",
-                "Position HCLTech global delivery for regulated 24x7 support.",
+                "Position global delivery for regulated 24x7 support.",
                 "Show governance, evidence control, and human approval gates as differentiators.",
             ],
             majorRisks=[
@@ -87,7 +87,7 @@ def get_demo_run() -> BidForgeRun:
         upload=UploadConfig(
             file="Apex_Global_Bank_RFP_demo.pdf",
             size="118 pages",
-            knowledgeBase="HCLTech demo proposal bank",
+            knowledgeBase="Demo proposal bank",
             selectedMode="Balanced review",
             estimatedCost="$10-$14",
             estimatedTime="3-5 min",

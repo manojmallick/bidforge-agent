@@ -14,9 +14,9 @@ This process creates five common failure modes:
 4. **Approval risk:** risky claims reach proposal drafts before human review.
 5. **No measurable value story:** teams struggle to show how automation saves time or improves quality.
 
-## Why It Matters To HCLTech
+## Why It Matters To Enterprise Bid Teams
 
-HCLTech responds to complex enterprise opportunities where speed, compliance, and governance matter. A stronger bid process can improve:
+Enterprise service providers respond to complex opportunities where speed, compliance, and governance matter. A stronger bid process can improve:
 
 - First-draft cycle time.
 - Requirement coverage.
