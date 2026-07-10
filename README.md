@@ -299,7 +299,6 @@ POST /api/automations/current/tick
 - [docs/demo-script.md](./docs/demo-script.md)
 - [docs/judging-checklist.md](./docs/judging-checklist.md)
 - [docs/automation-feature.md](./docs/automation-feature.md)
-- [docs/14-day-extension-roadmap.md](./docs/14-day-extension-roadmap.md)
 - [DECK.pdf](./DECK.pdf)
 
 ## Known Limitations
@@ -320,10 +319,6 @@ POST /api/automations/current/tick
 | AI Layer | Replace deterministic derivation with governed LLM/RAG pipeline and vector retrieval |
 | Observability | Add run metrics, reviewer SLA tracking, quality drift dashboards, and cost attribution |
 | Security | SSO, tenant isolation, encryption, policy engine, enterprise audit export |
-
-## 14-Day Extension Plan
-
-See [docs/14-day-extension-roadmap.md](./docs/14-day-extension-roadmap.md). The next highest-leverage upgrades are final deck refresh, clean install rehearsal, deployment/share-link polish, and submission rehearsal.
 
 ## License
 
