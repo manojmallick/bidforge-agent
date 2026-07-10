@@ -1,0 +1,15 @@
+{
+  "name": "bidforge-agent",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "demo": "sh scripts/demo.sh",
+    "dev:web": "npm --workspace apps/web run dev",
+    "build:web": "npm --workspace apps/web run build",
+    "dev:api": "cd services/api && PYTHONPATH=. python3 app/main.py",
+    "test:api": "cd services/api && PYTHONPATH=. python3 -m unittest discover -s tests"
+  }
+}

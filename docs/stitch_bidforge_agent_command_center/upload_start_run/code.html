@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BidForge Agent - Upload &amp; Run</title>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#0b1d2d",
+                      "surface-dim": "#d9dadb",
+                      "surface-container": "#edeeef",
+                      "secondary-container": "#90efef",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-secondary-fixed-variant": "#004f4f",
+                      "inverse-on-surface": "#f0f1f2",
+                      "secondary": "#006a6a",
+                      "on-background": "#191c1d",
+                      "background": "#f8f9fa",
+                      "surface": "#f8f9fa",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#191c1d",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#002020",
+                      "tertiary": "#221200",
+                      "primary-fixed-dim": "#b7c8de",
+                      "on-tertiary-container": "#ca8100",
+                      "secondary-fixed": "#93f2f2",
+                      "on-secondary-container": "#006e6e",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-tertiary-fixed": "#2a1700",
+                      "surface-tint": "#4f6073",
+                      "outline": "#74777d",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#1a2b3c",
+                      "surface-container-high": "#e7e8e9",
+                      "surface-container-highest": "#e1e3e4",
+                      "primary": "#041627",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#d2e4fb",
+                      "on-primary-container": "#8192a7",
+                      "tertiary-container": "#3e2400",
+                      "tertiary-fixed": "#ffddb8",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c4c6cd",
+                      "on-surface-variant": "#44474c",
+                      "surface-variant": "#e1e3e4",
+                      "secondary-fixed-dim": "#76d6d5",
+                      "surface-bright": "#f8f9fa",
+                      "inverse-primary": "#b7c8de",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-fixed-variant": "#38485a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "stack-xs": "4px",
+                      "margin-desktop": "32px",
+                      "container-max": "1440px",
+                      "stack-md": "16px",
+                      "gutter": "16px",
+                      "sidebar-width": "240px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "display-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "mono-sm": ["JetBrains Mono"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "display-sm": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                      "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                      "mono-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                      "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                      "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                      "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #c4c6cd; border-radius: 2px; }
+        .segmented-control input:checked + label { background-color: #006a6a; color: white; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex overflow-hidden">
+<!-- NavigationDrawer (Sidebar) -->
+<aside class="h-full w-sidebar-width fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col z-50 hidden md:flex">
+<div class="px-6 py-8">
+<div class="flex items-center gap-2 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">precision_manufacturing</span>
+<h1 class="font-headline-sm text-headline-sm text-primary">RFP Workspace</h1>
+</div>
+<nav class="flex flex-col gap-stack-sm">
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-secondary font-bold border-r-2 border-secondary bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+<span class="font-label-md text-label-md">Proposal Draft</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Compliance Matrix</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-label-md text-label-md">Risk Register</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto px-6 py-6 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">JD</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Jane Doe</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">Senior Procurement</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Mobile Top Bar -->
+<header class="md:hidden fixed top-0 left-0 right-0 h-16 bg-surface border-b border-outline-variant flex items-center justify-between px-margin-mobile z-50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+<span class="font-display-sm text-headline-sm text-primary font-bold">BidForge</span>
+</div>
+<button class="p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-sidebar-width min-h-screen flex flex-col overflow-y-auto custom-scrollbar pt-16 md:pt-0">
+<!-- Sticky Header / TopAppBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-outline-variant z-40">
+<div class="flex justify-between items-center px-margin-desktop w-full max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-4">
+<h2 class="font-headline-md text-headline-md text-primary">Upload &amp; Run</h2>
+<div class="hidden md:flex items-center px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded text-[10px] font-bold uppercase tracking-widest">
+                        Agent V2.4
+                    </div>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+</header>
+<div class="p-margin-mobile md:p-margin-desktop max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 mb-24">
+<!-- Left Column: Upload & Demo -->
+<div class="lg:col-span-7 space-y-6">
+<!-- Upload Zone -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all hover:border-secondary group relative">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">upload_file</span>
+                            RFP Document Intake
+                        </h3>
+<span class="text-xs text-on-surface-variant font-mono-sm">PDF, DOCX, XLSX (Max 50MB)</span>
+</div>
+<div class="border-2 border-dashed border-outline-variant rounded-lg p-12 flex flex-col items-center justify-center bg-surface-container-low/30 hover:bg-secondary/5 transition-all cursor-pointer group-hover:border-secondary" id="drop-zone">
+<span class="material-symbols-outlined text-4xl text-outline group-hover:text-secondary mb-4 transition-colors">cloud_upload</span>
+<p class="font-body-md text-body-md text-on-surface font-semibold mb-1">Drag and drop RFP files here</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">or click to browse your local files</p>
+</div>
+<!-- Demo Selector -->
+<div class="mt-6 pt-6 border-t border-outline-variant">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2 uppercase">Quick Start with Demo Data</label>
+<div class="relative">
+<select class="w-full h-10 pl-10 pr-4 bg-surface-container border border-outline-variant rounded font-body-md text-body-md focus:ring-2 focus:ring-secondary focus:outline-none appearance-none cursor-pointer">
+<option disabled="" selected="" value="">Select a pre-loaded industry RFP...</option>
+<option value="cloud">Cloud Infrastructure - Federal Gov (124pg)</option>
+<option value="logistics">Global Logistics Master Service Agreement (42pg)</option>
+<option value="cyber">Cybersecurity Audit &amp; Response RFP (88pg)</option>
+</select>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant">library_books</span>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+</section>
+<!-- Knowledge Base Selection (The Checklist) -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">database</span>
+                            Knowledge Bases
+                        </h3>
+<button class="text-secondary font-label-md text-label-md flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                            Add New Source
+                        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<label class="flex items-start gap-3 p-3 border border-outline-variant rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors group">
+<input checked="" class="mt-1 w-4 h-4 rounded text-secondary focus:ring-secondary border-outline-variant" type="checkbox"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Standard Contractual Terms</p>
+<p class="text-[11px] text-on-surface-variant leading-tight">Master legal templates for enterprise procurement.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3 border border-outline-variant rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors group">
+<input checked="" class="mt-1 w-4 h-4 rounded text-secondary focus:ring-secondary border-outline-variant" type="checkbox"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Technical Whitepapers 2024</p>
+<p class="text-[11px] text-on-surface-variant leading-tight">Detailed specifications for cloud and AI stacks.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3 border border-outline-variant rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors group">
+<input class="mt-1 w-4 h-4 rounded text-secondary focus:ring-secondary border-outline-variant" type="checkbox"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Compliance Archive (ISO/SOC2)</p>
+<p class="text-[11px] text-on-surface-variant leading-tight">Historical audit responses and certification logs.</p>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3 border border-outline-variant rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors group">
+<input checked="" class="mt-1 w-4 h-4 rounded text-secondary focus:ring-secondary border-outline-variant" type="checkbox"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Pricing Matrix v2</p>
+<p class="text-[11px] text-on-surface-variant leading-tight">Unit costs and volume discount logic.</p>
+</div>
+</label>
+</div>
+</section>
+</div>
+<!-- Right Column: Settings & Summary -->
+<div class="lg:col-span-5 space-y-6">
+<!-- Run Configuration Card -->
+<section class="bg-primary text-on-primary rounded-xl p-6 shadow-xl relative overflow-hidden">
+<!-- Background Accent -->
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
+<h3 class="font-headline-sm text-headline-sm mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">settings_suggest</span>
+                        Run Configuration
+                    </h3>
+<!-- Segmented Control -->
+<div class="mb-8">
+<label class="block font-label-md text-label-md text-primary-fixed-dim mb-3 uppercase tracking-wider">Processing Depth</label>
+<div class="grid grid-cols-3 bg-primary-container p-1 rounded-lg segmented-control">
+<input class="hidden" id="depth-fast" name="depth" type="radio"/>
+<label class="flex flex-col items-center justify-center py-3 rounded transition-colors cursor-pointer text-on-primary-container hover:text-white" for="depth-fast">
+<span class="font-label-md text-label-md">Fast</span>
+<span class="text-[9px] uppercase">Heuristic</span>
+</label>
+<input checked="" class="hidden" id="depth-balanced" name="depth" type="radio"/>
+<label class="flex flex-col items-center justify-center py-3 rounded transition-colors cursor-pointer text-on-primary-container hover:text-white" for="depth-balanced">
+<span class="font-label-md text-label-md">Balanced</span>
+<span class="text-[9px] uppercase">Recommended</span>
+</label>
+<input class="hidden" id="depth-thorough" name="depth" type="radio"/>
+<label class="flex flex-col items-center justify-center py-3 rounded transition-colors cursor-pointer text-on-primary-container hover:text-white" for="depth-thorough">
+<span class="font-label-md text-label-md">Thorough</span>
+<span class="text-[9px] uppercase">Full Audit</span>
+</label>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-primary-container rounded border border-on-primary-fixed-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed">model_training</span>
+<span class="font-label-md text-label-md">Model Engine</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-secondary-fixed">Forge-Pro-4.0</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-primary-container rounded border border-on-primary-fixed-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed">layers</span>
+<span class="font-label-md text-label-md">Extraction Modules</span>
+</div>
+<span class="font-mono-sm text-mono-sm text-secondary-fixed">8 Active</span>
+</div>
+</div>
+</section>
+<!-- Resource Estimation -->
+<section class="bg-surface-container-high/50 border border-outline-variant rounded-xl p-6">
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-6 uppercase tracking-widest">Resource Estimate</h3>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant font-bold uppercase mb-1">Estimated Cost</span>
+<div class="flex items-baseline gap-1">
+<span class="font-display-sm text-display-sm text-primary">$12.40</span>
+<span class="text-xs text-on-surface-variant">USD</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant font-bold uppercase mb-1">Estimated Time</span>
+<div class="flex items-baseline gap-1">
+<span class="font-display-sm text-display-sm text-primary">04:30</span>
+<span class="text-xs text-on-surface-variant">MIN</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<button class="w-full h-14 bg-secondary text-white rounded font-headline-sm text-headline-sm flex items-center justify-center gap-2 hover:bg-on-secondary-container transition-all active:scale-[0.98] shadow-lg shadow-secondary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                            Start Agent Run
+                        </button>
+<p class="text-center font-body-sm text-body-sm text-on-surface-variant px-4">
+                            You will be notified via email when the processing is complete.
+                        </p>
+</div>
+</section>
+<!-- Visualization / Animation Placeholder -->
+<div class="h-32 rounded-xl border border-outline-variant relative overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+<span class="bg-surface/80 backdrop-blur-md px-3 py-1 rounded-full border border-outline-variant font-label-sm text-label-sm text-on-surface flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                            Agent Engine Ready
+                        </span>
+</div>
+
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden by default, shown for primary actions if needed) -->
+<!-- Suppressed on this task-focused screen as per instructions -->
+<script>
+        // Micro-interaction for Drag and Drop Zone
+        const dropZone = document.getElementById('drop-zone');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('bg-secondary/10', 'border-secondary');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('bg-secondary/10', 'border-secondary');
+            }, false);
+        });
+
+        // Simple notification for "Start Run"
+        const startBtn = document.querySelector('button.bg-secondary');
+        startBtn.addEventListener('click', () => {
+            startBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">refresh</span> Processing...';
+            startBtn.disabled = true;
+            setTimeout(() => {
+                alert('Analysis job queued successfully! Job ID: BF-92841');
+                startBtn.innerHTML = '<span class="material-symbols-outlined" style="font-variation-settings: \'FILL\' 1;">play_arrow</span> Start Agent Run';
+                startBtn.disabled = false;
+            }, 1500);
+        });
+    </script>
+</body></html>

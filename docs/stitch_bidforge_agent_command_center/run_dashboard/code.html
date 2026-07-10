@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BidForge Agent - Run Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#0b1d2d",
+                      "surface-dim": "#d9dadb",
+                      "surface-container": "#edeeef",
+                      "secondary-container": "#90efef",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-secondary-fixed-variant": "#004f4f",
+                      "inverse-on-surface": "#f0f1f2",
+                      "secondary": "#008080",
+                      "on-background": "#191c1d",
+                      "background": "#f8f9fa",
+                      "surface": "#f8f9fa",
+                      "on-error-container": "#93000a",
+                      "on-surface": "#191c1d",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f3f4f5",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#002020",
+                      "tertiary": "#221200",
+                      "primary-fixed-dim": "#b7c8de",
+                      "on-tertiary-container": "#ca8100",
+                      "secondary-fixed": "#93f2f2",
+                      "on-secondary-container": "#006e6e",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-tertiary-fixed": "#2a1700",
+                      "surface-tint": "#4f6073",
+                      "outline": "#74777d",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#1a2b3c",
+                      "surface-container-high": "#e7e8e9",
+                      "surface-container-highest": "#e1e3e4",
+                      "primary": "#041627",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#d2e4fb",
+                      "on-primary-container": "#8192a7",
+                      "tertiary-container": "#3e2400",
+                      "tertiary-fixed": "#ffddb8",
+                      "on-secondary": "#ffffff",
+                      "outline-variant": "#c4c6cd",
+                      "on-surface-variant": "#44474c",
+                      "surface-variant": "#e1e3e4",
+                      "secondary-fixed-dim": "#76d6d5",
+                      "surface-bright": "#f8f9fa",
+                      "inverse-primary": "#b7c8de",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-fixed-variant": "#38485a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "stack-xs": "4px",
+                      "margin-desktop": "32px",
+                      "container-max": "1440px",
+                      "stack-md": "16px",
+                      "gutter": "16px",
+                      "sidebar-width": "240px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "display-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "mono-sm": ["JetBrains Mono"],
+                      "label-sm": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "display-sm": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                      "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .circular-gauge {
+            transform: rotate(-90deg);
+        }
+        .progress-line {
+            background-image: linear-gradient(to bottom, #008080 50%, #e1e3e4 50%);
+            background-size: 100% 200%;
+            background-position: bottom;
+            transition: background-position 1s ease-in-out;
+        }
+        .active-step .node {
+            box-shadow: 0 0 0 4px rgba(0, 128, 128, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- TopAppBar Shell Component -->
+<header class="w-full top-0 sticky bg-surface border-b border-outline-variant z-50">
+<div class="flex justify-between items-center px-margin-desktop w-full max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px;">precision_manufacturing</span>
+<h1 class="font-display-sm text-display-sm font-bold text-primary">BidForge Agent</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<div class="flex gap-stack-md mr-stack-md hidden md:flex">
+<span class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 cursor-pointer px-stack-sm py-stack-xs rounded">Workspace</span>
+<span class="font-label-md text-label-md text-secondary font-bold hover:bg-surface-container-low transition-colors duration-200 cursor-pointer px-stack-sm py-stack-xs rounded">Run Dashboard</span>
+<span class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 cursor-pointer px-stack-sm py-stack-xs rounded">Analytics</span>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer">account_circle</span>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- NavigationDrawer Shell Component -->
+<aside class="h-full w-sidebar-width bg-surface-container-lowest border-r border-outline-variant hidden md:flex flex-col py-stack-md shrink-0">
+<div class="px-stack-md mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-primary">RFP Workspace</h2>
+</div>
+<nav class="flex flex-col">
+<div class="flex items-center gap-stack-sm px-stack-md py-stack-sm text-secondary font-bold border-r-2 border-secondary bg-surface-container cursor-pointer">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-stack-sm px-stack-md py-stack-sm text-on-surface-variant hover:bg-surface-container cursor-pointer transition-all">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Compliance Matrix</span>
+</div>
+<div class="flex items-center gap-stack-sm px-stack-md py-stack-sm text-on-surface-variant hover:bg-surface-container cursor-pointer transition-all">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Proposal Draft</span>
+</div>
+<div class="flex items-center gap-stack-sm px-stack-md py-stack-sm text-on-surface-variant hover:bg-surface-container cursor-pointer transition-all">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-label-md text-label-md">Risk Register</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto overflow-x-hidden">
+<!-- Human Approval Banner -->
+<section class="bg-tertiary text-on-tertiary px-margin-desktop py-stack-sm flex items-center justify-between">
+<div class="flex items-center gap-stack-sm">
+<span class="material-symbols-outlined text-on-tertiary" style="font-variation-settings: 'FILL' 1;">priority_high</span>
+<p class="font-label-md text-label-md">ACTION REQUIRED: 3 high-risk compliance exceptions identified in Section 4.2. Pending human approval.</p>
+</div>
+<button class="bg-secondary-fixed text-on-secondary-container px-stack-md py-stack-xs rounded font-label-md text-label-md hover:opacity-90 transition-opacity">Review Now</button>
+</section>
+<div class="max-w-container-max mx-auto p-margin-desktop space-y-gutter">
+<!-- Top Status Bar Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Requirements</p>
+<h3 class="font-display-sm text-display-sm text-primary">84</h3>
+</div>
+<span class="material-symbols-outlined text-primary-fixed-dim" style="font-size: 32px;">assignment</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Identified Risks</p>
+<h3 class="font-display-sm text-display-sm text-error">17</h3>
+</div>
+<span class="material-symbols-outlined text-error-container" style="font-size: 32px;">report_problem</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md flex items-center justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Doc Coverage</p>
+<h3 class="font-display-sm text-display-sm text-secondary">92%</h3>
+</div>
+<span class="material-symbols-outlined text-secondary-container" style="font-size: 32px;">grid_view</span>
+</div>
+</div>
+<!-- Main Grid: Timeline and Core Meters -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Agent Timeline -->
+<div class="lg:col-span-4 bg-surface-container-lowest border border-outline-variant p-stack-md h-full min-h-[500px]">
+<div class="flex items-center justify-between mb-stack-md">
+<h4 class="font-headline-sm text-headline-sm text-primary">Agent Process Timeline</h4>
+<span class="font-label-sm text-label-sm text-secondary px-stack-sm py-stack-xs bg-secondary-container rounded">LIVE</span>
+</div>
+<div class="relative space-y-8 pl-6">
+<!-- Connector Line -->
+<div class="absolute left-[7px] top-2 bottom-2 w-[2px] bg-outline-variant"></div>
+<!-- Step 1: Completed -->
+<div class="relative flex items-start gap-stack-md">
+<div class="absolute -left-[23px] w-[16px] h-[16px] rounded-full bg-secondary z-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-size: 12px;">check</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-primary">Document Ingestion</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">42 source files successfully indexed.</p>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant opacity-60">Completed 14:20:05</span>
+</div>
+</div>
+<!-- Step 2: Completed -->
+<div class="relative flex items-start gap-stack-md">
+<div class="absolute -left-[23px] w-[16px] h-[16px] rounded-full bg-secondary z-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-size: 12px;">check</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-primary">Requirement Extraction</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Identified 84 unique technical mandates.</p>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant opacity-60">Completed 14:22:18</span>
+</div>
+</div>
+<!-- Step 3: Active -->
+<div class="relative flex items-start gap-stack-md active-step">
+<div class="node absolute -left-[23px] w-[16px] h-[16px] rounded-full bg-secondary z-10 animate-pulse"></div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-secondary font-bold">Risk Assessment &amp; Scoring</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Analyzing Section 4.5 against historical compliance benchmarks.</p>
+<div class="mt-stack-sm w-full bg-surface-container rounded-full h-1">
+<div class="bg-secondary h-1 rounded-full" style="width: 65%"></div>
+</div>
+<span class="font-mono-sm text-mono-sm text-secondary">Processing... (65%)</span>
+</div>
+</div>
+<!-- Step 4: Pending -->
+<div class="relative flex items-start gap-stack-md opacity-40">
+<div class="absolute -left-[23px] w-[16px] h-[16px] rounded-full bg-outline-variant z-10"></div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface-variant">Response Formulation</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Drafting technical justifications for compliance gaps.</p>
+</div>
+</div>
+<!-- Step 5: Pending -->
+<div class="relative flex items-start gap-stack-md opacity-40">
+<div class="absolute -left-[23px] w-[16px] h-[16px] rounded-full bg-outline-variant z-10"></div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface-variant">Final Validation</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Executing cross-consistency checks across all sections.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Analytics Bento Grid -->
+<div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-gutter h-full">
+<!-- Quality Score Gauge -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md flex flex-col items-center justify-center text-center">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-stack-md">Process Quality Score</h4>
+<div class="relative w-40 h-40">
+<svg class="circular-gauge w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-container stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="10"></circle>
+<circle class="text-secondary stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="30.14" stroke-linecap="round" stroke-width="10"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-sm text-display-sm text-primary">88</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">A- Grade</span>
+</div>
+</div>
+<p class="mt-stack-md font-body-sm text-body-sm text-on-surface-variant">Quality indicates high adherence to RFP linguistic requirements.</p>
+</div>
+<!-- Performance Meters -->
+<div class="bg-surface-container-lowest border border-outline-variant p-stack-md">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-stack-md">System Latency &amp; Token Usage</h4>
+<!-- Token Usage Chart -->
+<div class="mb-gutter">
+<div class="flex justify-between items-end mb-stack-xs">
+<p class="font-label-md text-label-md text-primary">Token Throughput</p>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">4.2k/min</span>
+</div>
+<div class="flex items-end gap-1 h-16">
+<div class="bg-primary w-full h-[40%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[60%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[55%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[85%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[70%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[95%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[45%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[30%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[65%] rounded-t-sm"></div>
+<div class="bg-secondary w-full h-[80%] rounded-t-sm animate-pulse"></div>
+</div>
+</div>
+<!-- Latency Meter -->
+<div>
+<div class="flex justify-between items-end mb-stack-xs">
+<p class="font-label-md text-label-md text-primary">API Latency</p>
+<span class="font-mono-sm text-mono-sm text-on-surface-variant">1.2s avg</span>
+</div>
+<div class="flex items-end gap-1 h-16">
+<div class="bg-secondary-fixed-dim w-full h-[20%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[25%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[15%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[35%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[20%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[18%] rounded-t-sm"></div>
+<div class="bg-error-container w-full h-[90%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[22%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[15%] rounded-t-sm"></div>
+<div class="bg-secondary-fixed-dim w-full h-[20%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<!-- Active Document Processing Preview -->
+<div class="md:col-span-2 bg-surface-container-lowest border border-outline-variant p-stack-md">
+<div class="flex justify-between items-center mb-stack-md">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Live Agent Log</h4>
+<button class="text-secondary font-label-md text-label-md flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined" style="font-size: 16px;">file_download</span> Export Logs
+                                </button>
+</div>
+<div class="font-mono-sm text-mono-sm bg-primary text-white p-stack-md overflow-hidden rounded">
+<p class="opacity-50">[14:28:01] INFO: Initializing risk sub-module for 'Legal Indemnity'...</p>
+<p class="opacity-70">[14:28:03] WARN: Potential conflict in Section 4.2 vs Standard T&amp;Cs.</p>
+<p class="opacity-70">[14:28:05] INFO: Vector search returned 5 similar historical bids.</p>
+<p class="text-secondary-fixed font-bold">[14:28:10] PROCESSING: Constructing citation graph for RFP item #84-A...</p>
+<div class="mt-stack-sm flex gap-stack-xs items-center">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full animate-ping"></span>
+<span class="typing-cursor">|</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Stats -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter pt-gutter">
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Model</p>
+<p class="font-mono-sm text-mono-sm text-primary font-bold">GPT-4-FORGE-V2</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Run Time</p>
+<p class="font-mono-sm text-mono-sm text-primary font-bold">00:14:22</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Cost Estimate</p>
+<p class="font-mono-sm text-mono-sm text-primary font-bold">$12.44</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">Confidence</p>
+<p class="font-mono-sm text-mono-sm text-secondary font-bold">High (0.94)</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation Shell -->
+<nav class="md:hidden w-full h-16 bg-surface border-t border-outline-variant flex justify-around items-center">
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Dash</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="text-[10px] font-bold">Monitor</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">description</span>
+<span class="text-[10px] font-bold">Drafts</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Config</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction for typing cursor
+        const cursor = document.querySelector('.typing-cursor');
+        if(cursor) {
+            setInterval(() => {
+                cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+            }, 500);
+        }
+
+        // Handle active navigation logic (simple toggle simulation)
+        document.querySelectorAll('nav div').forEach(item => {
+            item.addEventListener('click', function() {
+                // This is a simplified visual toggle for demo purposes
+                console.log('Navigating to:', this.innerText.trim());
+            });
+        });
+    </script>
+</body></html>

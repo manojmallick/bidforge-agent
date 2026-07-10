@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BidForge Agent - Proposal Draft</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#0b1d2d",
+                        "surface-dim": "#d9dadb",
+                        "surface-container": "#edeeef",
+                        "secondary-container": "#90efef",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary-fixed-variant": "#004f4f",
+                        "inverse-on-surface": "#f0f1f2",
+                        "secondary": "#006a6a",
+                        "on-background": "#191c1d",
+                        "background": "#f8f9fa",
+                        "surface": "#f8f9fa",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#002020",
+                        "tertiary": "#221200",
+                        "primary-fixed-dim": "#b7c8de",
+                        "on-tertiary-container": "#ca8100",
+                        "secondary-fixed": "#93f2f2",
+                        "on-secondary-container": "#006e6e",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-tint": "#4f6073",
+                        "outline": "#74777d",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1a2b3c",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container-highest": "#e1e3e4",
+                        "primary": "#041627",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d2e4fb",
+                        "on-primary-container": "#8192a7",
+                        "tertiary-container": "#3e2400",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6cd",
+                        "on-surface-variant": "#44474c",
+                        "surface-variant": "#e1e3e4",
+                        "secondary-fixed-dim": "#76d6d5",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-primary": "#b7c8de",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-fixed-variant": "#38485a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "stack-xs": "4px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "sidebar-width": "240px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-sm": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .citation-drawer { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .draft-area::selection { background: #90efef; color: #002020; }
+        .active-tab { border-bottom: 2px solid #006a6a; color: #006a6a; }
+        .tab-transition { transition: all 0.2s ease-in-out; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex min-h-screen">
+<!-- NavigationDrawer Shell -->
+<aside class="h-full w-sidebar-width fixed left-0 top-0 bg-surface-container-lowest dark:bg-surface-container-low border-r border-outline-variant dark:border-outline flex flex-col gap-stack-sm py-stack-md z-30 hidden md:flex">
+<div class="px-6 mb-6">
+<h1 class="font-headline-sm text-headline-sm text-primary">RFP Workspace</h1>
+</div>
+<nav class="flex flex-col">
+<div class="flex items-center gap-3 px-6 py-3 cursor-pointer transition-all hover:bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 cursor-pointer transition-all hover:bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Compliance Matrix</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 cursor-pointer transition-all text-secondary dark:text-secondary-fixed-dim font-bold border-r-2 border-secondary bg-surface-container">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Proposal Draft</span>
+</div>
+<div class="flex items-center gap-3 px-6 py-3 cursor-pointer transition-all hover:bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-label-md text-label-md">Risk Register</span>
+</div>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen relative overflow-x-hidden">
+<!-- TopAppBar Shell -->
+<header class="w-full top-0 sticky z-20 bg-surface border-b border-outline-variant h-16 flex justify-between items-center px-margin-desktop max-w-container-max mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span class="font-display-sm text-display-sm font-bold text-primary">BidForge Agent</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-3 py-1.5 border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-size: 20px;">save</span>
+<span class="font-label-md text-label-md">Draft Saved</span>
+</button>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Draft Navigation Sub-tabs -->
+<div class="bg-surface border-b border-outline-variant sticky top-16 z-10">
+<div class="max-w-container-max mx-auto px-margin-desktop flex gap-8">
+<button class="py-4 font-label-md text-label-md tab-transition hover:text-secondary">Exec Summary</button>
+<button class="py-4 font-label-md text-label-md tab-transition active-tab font-bold">Solution</button>
+<button class="py-4 font-label-md text-label-md tab-transition hover:text-secondary">Security</button>
+<button class="py-4 font-label-md text-label-md tab-transition hover:text-secondary">Delivery</button>
+</div>
+</div>
+<!-- Content Area: Side-by-side Layout -->
+<div class="flex-1 flex flex-col lg:flex-row max-w-container-max mx-auto w-full p-6 gap-6 relative">
+<!-- Document Canvas -->
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-lg p-10 shadow-sm min-h-[1000px]">
+<div class="max-w-3xl mx-auto space-y-8">
+<!-- Section Header -->
+<div class="space-y-2">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Section 2.4</span>
+<h2 class="font-display-sm text-display-sm text-primary">Proposed Technical Solution &amp; Integration</h2>
+</div>
+<!-- Paragraph with Inline Badges -->
+<div class="font-body-md text-body-md text-on-surface leading-relaxed space-y-6">
+<p>
+                            Our proposed architecture leverages a distributed micro-services framework designed specifically for high-frequency procurement data processing. 
+                            The system utilizes an asynchronous message bus to ensure 99.99% uptime during peak load periods. 
+                            <span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-sm font-label-sm inline-flex items-center gap-1 mx-1 border border-secondary/20 cursor-help group relative">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                Verified
+                            </span>
+                            By decoupling the ingestion engine from the analysis layer, BidForge ensures that data latency remains below 150ms even under extreme enterprise stress tests.
+                        </p>
+<p>
+                            Integration with existing ERP systems—specifically SAP S/4HANA and Oracle NetSuite—is handled via our proprietary 'BridgeLink' API. 
+                            <span class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded-sm font-label-sm inline-flex items-center gap-1 mx-1 border border-tertiary/20 cursor-help">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+                                Needs SME
+                            </span>
+                            Preliminary mappings indicate that the custom object synchronization module will require localized validation against the client's specific database schema for legacy procurement records.
+                        </p>
+<div class="bg-surface-container-low border-l-4 border-secondary p-4 my-8 rounded-r-lg">
+<p class="italic text-on-surface-variant font-body-sm">
+                                "The agent has successfully identified 14 redundant fields in the technical RFP requirement list that were consolidated into a single unified service endpoint."
+                            </p>
+</div>
+<p>
+                            Security protocols for data in transit follow TLS 1.3 standards, while data at rest is encrypted using AES-256 with rotation policies managed by AWS KMS. 
+                            <span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-sm font-label-sm inline-flex items-center gap-1 mx-1 border border-secondary/20 cursor-help">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                Verified
+                            </span>
+                            All integration points are protected by OAuth 2.0 with strict scopes and mandatory MFA for administrative access.
+                        </p>
+<h3 class="font-headline-sm text-headline-sm text-primary mt-12">Performance Benchmarks</h3>
+<div class="border border-outline-variant rounded-lg overflow-hidden mt-4">
+<table class="w-full text-left text-body-sm">
+<thead class="bg-surface-container-high border-b border-outline-variant">
+<tr>
+<th class="px-4 py-2 font-label-md">Metric</th>
+<th class="px-4 py-2 font-label-md">Target</th>
+<th class="px-4 py-2 font-label-md">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-2">Concurrent Connections</td>
+<td class="px-4 py-2">10,000+</td>
+<td class="px-4 py-2 text-secondary font-bold">Validated</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-2">Ingestion Latency</td>
+<td class="px-4 py-2">&lt; 200ms</td>
+<td class="px-4 py-2 text-secondary font-bold">Validated</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-2">Cold Boot Time</td>
+<td class="px-4 py-2">&lt; 3s</td>
+<td class="px-4 py-2 text-tertiary font-bold">Pending</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Sidebar: Citations/Evidence -->
+<aside class="w-full lg:w-80 flex flex-col gap-4">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg flex flex-col h-fit">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h4 class="font-label-md text-label-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">library_books</span>
+                            Source Evidence
+                        </h4>
+<span class="bg-primary-container text-on-primary-container text-[10px] px-1.5 py-0.5 rounded-full">3 Active</span>
+</div>
+<div class="p-4 space-y-4">
+<!-- Citation Card 1 -->
+<div class="group border border-outline-variant rounded p-3 hover:border-secondary transition-colors cursor-pointer bg-white">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary">DOC-094</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-secondary text-[16px]">open_in_new</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mb-2 font-medium">Technical Architecture V4.2</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">"...distributed bus allows for horizontal scaling of worker nodes across three availability zones..."</p>
+</div>
+<!-- Citation Card 2 -->
+<div class="group border border-outline-variant rounded p-3 hover:border-secondary transition-colors cursor-pointer bg-white">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-secondary">SEC-2023</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-secondary text-[16px]">open_in_new</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mb-2 font-medium">Security Whitepaper</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-3">"Data at rest is secured via AES-256 encryption. Key rotation is automated every 90 days."</p>
+</div>
+<!-- Citation Card 3 (Missing / Needs SME) -->
+<div class="group border border-error/30 bg-error-container/10 rounded p-3 cursor-help">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-error">GAP-DETECTION</span>
+<span class="material-symbols-outlined text-error text-[16px]">error_outline</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface mb-2 font-medium">ERP Integration Log</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">No exact match found for "SAP localized legacy field mapping". Recommendation: Consult Technical Lead.</p>
+</div>
+</div>
+</div>
+<!-- Chat/Agent Context Card -->
+<div class="bg-primary text-on-primary rounded-lg p-4 shadow-lg">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-secondary-fixed">auto_awesome</span>
+<span class="font-label-md text-label-md text-secondary-fixed">Agent Suggestions</span>
+</div>
+<p class="text-[12px] opacity-90 leading-tight mb-4">
+                        I've analyzed the draft and highlighted the Security section as "High Confidence" based on your 2023 ISO audit documents.
+                    </p>
+<button class="w-full py-2 bg-on-primary-fixed-variant text-white font-label-md rounded text-center hover:bg-opacity-80 transition-all">
+                        Generate Remaining 20%
+                    </button>
+</div>
+</aside>
+</div>
+<!-- Inline Interaction Script -->
+<script>
+            // Simple tab switching simulation
+            const tabs = document.querySelectorAll('.tab-transition');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active-tab', 'font-bold'));
+                    tab.classList.add('active-tab', 'font-bold');
+                });
+            });
+
+            // Handle badge hover interaction
+            document.querySelectorAll('.bg-secondary-container').forEach(badge => {
+                badge.addEventListener('mouseenter', () => {
+                   // Logic for showing source tooltips could go here
+                });
+            });
+        </script>
+</main>
+<!-- Floating Action Button for Agent Chat (Contextual) -->
+<button class="fixed bottom-6 right-6 w-14 h-14 bg-secondary text-white rounded-full shadow-xl flex items-center justify-center hover:scale-105 transition-transform z-50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</button>
+</body></html>

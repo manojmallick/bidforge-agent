@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BidForge Agent - SME Task Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#0b1d2d",
+                        "surface-dim": "#d9dadb",
+                        "surface-container": "#edeeef",
+                        "secondary-container": "#90efef",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary-fixed-variant": "#004f4f",
+                        "inverse-on-surface": "#f0f1f2",
+                        "secondary": "#006a6a",
+                        "on-background": "#191c1d",
+                        "background": "#f8f9fa",
+                        "surface": "#f8f9fa",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c1d",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#002020",
+                        "tertiary": "#221200",
+                        "primary-fixed-dim": "#b7c8de",
+                        "on-tertiary-container": "#ca8100",
+                        "secondary-fixed": "#93f2f2",
+                        "on-secondary-container": "#006e6e",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-tint": "#4f6073",
+                        "outline": "#74777d",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#1a2b3c",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container-highest": "#e1e3e4",
+                        "primary": "#041627",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#d2e4fb",
+                        "on-primary-container": "#8192a7",
+                        "tertiary-container": "#3e2400",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c4c6cd",
+                        "on-surface-variant": "#44474c",
+                        "surface-variant": "#e1e3e4",
+                        "secondary-fixed-dim": "#76d6d5",
+                        "surface-bright": "#f8f9fa",
+                        "inverse-primary": "#b7c8de",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-fixed-variant": "#38485a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "stack-xs": "4px",
+                        "margin-desktop": "32px",
+                        "container-max": "1440px",
+                        "stack-md": "16px",
+                        "gutter": "16px",
+                        "sidebar-width": "240px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "mono-sm": ["JetBrains Mono"],
+                        "label-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-sm": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                        "mono-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f8f9fa;
+            color: #191c1d;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .kanban-column {
+            min-width: 320px;
+            max-width: 320px;
+            height: calc(100vh - 128px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c4c6cd;
+            border-radius: 10px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface selection:bg-secondary-container">
+<!-- Sidebar (NavigationDrawer) -->
+<aside class="h-full w-sidebar-width fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col gap-stack-sm py-stack-md z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-sm text-headline-sm text-primary">RFP Workspace</h1>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-3">
+<div class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container cursor-pointer transition-all rounded">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-2 text-secondary font-bold border-r-2 border-secondary bg-surface-container cursor-pointer transition-all">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Compliance Matrix</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container cursor-pointer transition-all rounded">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Proposal Draft</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-container cursor-pointer transition-all rounded">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-label-md text-label-md">Risk Register</span>
+</div>
+</nav>
+<div class="mt-auto px-4 py-4 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">JD</div>
+<div class="overflow-hidden">
+<p class="font-label-md text-label-md truncate">Jane Doe</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Sr. SME Lead</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface border-b border-outline-variant">
+<div class="flex justify-between items-center px-margin-desktop w-full max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">precision_manufacturing</span>
+<h2 class="font-display-sm text-display-sm font-bold text-primary">BidForge Agent</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-label-md text-secondary font-bold transition-colors duration-200" href="#">Task Board</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 px-2 py-1 rounded" href="#">Analytics</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 px-2 py-1 rounded" href="#">Resources</a>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">search</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+<span class="material-symbols-outlined text-primary">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Page Header -->
+<section class="px-8 py-6 flex justify-between items-end">
+<div>
+<p class="font-label-sm text-label-sm text-secondary uppercase tracking-[0.1em] mb-1">RFP-2024-SEC-089</p>
+<h3 class="font-display-sm text-display-sm text-primary">SME Task Board</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Manage technical clarifications and expert review cycles.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface border border-outline px-4 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter
+                </button>
+<button class="bg-secondary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">add</span> New Request
+                </button>
+</div>
+</section>
+<!-- Kanban Board Container -->
+<div class="flex-1 overflow-x-auto custom-scrollbar px-8 pb-8">
+<div class="flex gap-6 min-w-max h-full">
+<!-- Column: Pending -->
+<div class="kanban-column flex flex-col">
+<div class="flex items-center justify-between bg-primary-container text-on-primary-container px-4 py-3 rounded-t-lg border-b-2 border-primary">
+<span class="font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">hourglass_empty</span> PENDING
+                        </span>
+<span class="bg-primary px-2 py-0.5 rounded text-[10px] font-bold">12</span>
+</div>
+<div class="flex-1 bg-surface-container-low border-x border-b border-outline-variant p-3 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+<!-- Task Card 1 -->
+<div class="bg-surface border border-outline-variant p-3 rounded shadow-sm hover:border-secondary cursor-pointer transition-colors group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-mono-sm text-mono-sm text-secondary font-bold">REQ-402</span>
+<span class="status-badge bg-error-container text-on-error-container">High Risk</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-semibold mb-3 group-hover:text-secondary transition-colors">Scalability and Multi-region Failover Strategy</p>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a senior software architect with graying hair and glasses, set against a clean, corporate office background with soft blue tones and minimalist decor. High-end business portrait photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByZ4t978RnEOwyFhW4VjFoPE2iNkNZgtu84nMZVuYm_j-5A87ThRTUqcUawfO2LwMYmAIgd2y-7t21bvOQ0STMCEu6BsUe_0rSToMoC9qHbERjUVgFXLDzpX3ZvREVxulH7F_pud0hC72xC9AQWgZiEub40b7uCQ5DQg-_N_5-dcfmSu3awfwIlSriQnfl7_LdTkQnyYBXtfxRhCnyxQGmbdv1-F3M_k-ljidxwJO9uemtRdY6A_hMeGMX3ReerSYmnRWdXz5rbA"/>
+</div>
+<div class="w-6 h-6 rounded-full border border-surface bg-primary-fixed-dim flex items-center justify-center text-[10px] font-bold">+2</div>
+</div>
+<span class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> 2d left
+                                </span>
+</div>
+</div>
+<!-- Task Card 2 -->
+<div class="bg-surface border border-outline-variant p-3 rounded shadow-sm hover:border-secondary cursor-pointer transition-colors group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-mono-sm text-mono-sm text-secondary font-bold">REQ-112</span>
+<span class="status-badge bg-surface-container-highest text-on-surface-variant">Standard</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-semibold mb-3">API Authentication Flow Details</p>
+<div class="flex justify-between items-center">
+<div class="w-6 h-6 rounded-full border border-surface overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a young female cybersecurity expert with sharp features, wearing professional dark attire, neutral expression. The background is a blurred server room with subtle neon teal and navy lighting, conveying technical expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuApS7AM4aDi37v_MI9mOEFtlm3N2JlpFfH0ebqACemUYgLNAXokwHkLMaazyoI999HBg_WNwQx1uCfsgKCtWdSSteBLZ8kSxpDRPL_7oZdajZlZ8bno_KXizDrxjv28IjrnbQ-wQF1IvUcmkYWGrViVvO921jgI0sXA6A2Wt7pt9dxMsZRE5gl9TjQhwnb-n2VGwqv-Uh4hnxAs3dxHkayFfZwHxZfUQT0SwRqnwTuavEHzT-t4y5ltwafaBRLqRsrj4AbOnw9nVQ"/>
+</div>
+<span class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">chat_bubble_outline</span> 4
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Assigned -->
+<div class="kanban-column flex flex-col">
+<div class="flex items-center justify-between bg-primary-container text-on-primary-container px-4 py-3 rounded-t-lg border-b-2 border-secondary">
+<span class="font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">person_search</span> ASSIGNED
+                        </span>
+<span class="bg-secondary px-2 py-0.5 rounded text-[10px] font-bold">5</span>
+</div>
+<div class="flex-1 bg-surface-container-low border-x border-b border-outline-variant p-3 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+<!-- Task Card 3 -->
+<div class="bg-surface border border-outline-variant p-3 rounded shadow-sm border-l-4 border-l-secondary">
+<div class="flex justify-between items-start mb-2">
+<span class="font-mono-sm text-mono-sm text-secondary font-bold">REQ-883</span>
+<span class="status-badge bg-secondary-container text-on-secondary-container">Technical</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-semibold mb-1">SOC-2 Type II Compliance Documentation</p>
+<p class="text-[11px] text-on-surface-variant mb-3">Owner: Michael Chen</p>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full border border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A male data security analyst in his 40s with a focused expression, wearing a navy polo shirt. Modern office setting with sleek glass partitions and soft natural lighting. Minimalist corporate portrait style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxHdH8r-07HiQ5NAJzWiY-NKG0lk3BCnNJF2TC85ljXNyRIMmtNw1Gdkpb5J22ygjXD93wBPyraM68Zvl9tCTWGwuI5glfmI3z7quUuXIR2kF5gWVUvtb1ObuksnuXxiQi_-y7GuJvb4a4oyAsFyGGtSIoFtS9ZxYRU6W3z0pSF5XhfTthUWWktBRSKhBv6AnkIWIiNlojD88fr7TjTPDgIdMDQKQaAT8HBVm3A9IayNY3ZH6vJwcHJrfIf4tK37SG3hmiP-noQA"/>
+</div>
+<span class="text-[10px] text-secondary font-bold">Working</span>
+</div>
+<span class="text-[10px] text-error font-bold uppercase">Overdue</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Answered -->
+<div class="kanban-column flex flex-col">
+<div class="flex items-center justify-between bg-primary-container text-on-primary-container px-4 py-3 rounded-t-lg border-b-2 border-outline-variant">
+<span class="font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">quick_phrases</span> ANSWERED
+                        </span>
+<span class="bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded text-[10px] font-bold">8</span>
+</div>
+<div class="flex-1 bg-surface-container-low border-x border-b border-outline-variant p-3 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+<!-- Task Card 4 -->
+<div class="bg-surface border border-outline-variant p-3 rounded shadow-sm opacity-80">
+<div class="flex justify-between items-start mb-2">
+<span class="font-mono-sm text-mono-sm text-secondary font-bold">REQ-221</span>
+<span class="status-badge bg-surface-container text-on-surface">Review Pending</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-semibold mb-3">SLA for 24/7 Premium Support Tier</p>
+<div class="flex justify-between items-center">
+<div class="w-6 h-6 rounded-full bg-secondary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">done</span>
+</div>
+<span class="text-[10px] text-on-surface-variant italic">Drafted 2h ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Approved -->
+<div class="kanban-column flex flex-col">
+<div class="flex items-center justify-between bg-secondary text-on-primary px-4 py-3 rounded-t-lg">
+<span class="font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">verified</span> APPROVED
+                        </span>
+<span class="bg-on-secondary-container text-secondary-container px-2 py-0.5 rounded text-[10px] font-bold">24</span>
+</div>
+<div class="flex-1 bg-surface-container-low border-x border-b border-outline-variant p-3 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+<div class="flex flex-col items-center justify-center py-10 text-on-surface-variant/30">
+<span class="material-symbols-outlined text-4xl">inventory_2</span>
+<p class="font-label-sm text-label-sm mt-2">Archive Ready</p>
+</div>
+<!-- Completed Item -->
+<div class="bg-surface border border-outline-variant p-3 rounded shadow-sm opacity-60">
+<div class="flex justify-between items-start mb-2">
+<span class="font-mono-sm text-mono-sm text-secondary font-bold">REQ-004</span>
+<span class="status-badge bg-green-100 text-green-800">Final</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-semibold mb-1 line-through">Company Financial Health Disclosure</p>
+<div class="flex justify-end">
+<span class="material-symbols-outlined text-secondary text-[16px]">verified_user</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden on board, usually for dashboard, but adding placeholder logic) -->
+<!-- <button class="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform z-50">
+        <span class="material-symbols-outlined">add</span>
+    </button> -->
+<script>
+        // Micro-interactions for Kanban Cards
+        document.querySelectorAll('.kanban-column div[class*="bg-surface"]').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'all 0.2s ease-out';
+                card.classList.add('shadow-md');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.classList.remove('shadow-md');
+            });
+        });
+
+        // Simple horizontal drag-scroll feel for the board
+        const slider = document.querySelector('.overflow-x-auto');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.overflow-y-auto')) return;
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+        slider.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    </script>
+</body></html>
