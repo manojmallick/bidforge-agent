@@ -116,32 +116,34 @@ BidForge is designed around what hackathon judges usually reward:
 
 ## Demo Routes
 
-All links are shareable query routes, not hash routes.
+The deployed demo uses shareable query routes, so each view can be opened directly without hash URLs.
 
-```text
-http://localhost:5174?view=dashboard
-http://localhost:5174?view=upload
-http://localhost:5174?view=matrix
-http://localhost:5174?view=proposal
-http://localhost:5174?view=knowledge
-http://localhost:5174?view=inbox
-http://localhost:5174?view=risks
-http://localhost:5174?view=tasks
-http://localhost:5174?view=judge
-http://localhost:5174?view=brief
-http://localhost:5174?view=strategy
-http://localhost:5174?view=competitive
-http://localhost:5174?view=package
-http://localhost:5174?view=analytics
-http://localhost:5174?view=sla
-http://localhost:5174?view=roi
-http://localhost:5174?view=benchmark
-http://localhost:5174?view=flow
-http://localhost:5174?view=governance
-http://localhost:5174?view=ai-governance
-http://localhost:5174?view=integrations
-http://localhost:5174?view=automation
-```
+| View | Live Link |
+| --- | --- |
+| Dashboard | [Open](https://web-three-delta-62.vercel.app/?view=dashboard) |
+| Upload | [Open](https://web-three-delta-62.vercel.app/?view=upload) |
+| Compliance Matrix | [Open](https://web-three-delta-62.vercel.app/?view=matrix) |
+| Proposal Draft | [Open](https://web-three-delta-62.vercel.app/?view=proposal) |
+| Knowledge Base | [Open](https://web-three-delta-62.vercel.app/?view=knowledge) |
+| Collaboration Inbox | [Open](https://web-three-delta-62.vercel.app/?view=inbox) |
+| Risk Register | [Open](https://web-three-delta-62.vercel.app/?view=risks) |
+| SME Tasks | [Open](https://web-three-delta-62.vercel.app/?view=tasks) |
+| Judge Report | [Open](https://web-three-delta-62.vercel.app/?view=judge) |
+| Executive Win Brief | [Open](https://web-three-delta-62.vercel.app/?view=brief) |
+| Win Strategy | [Open](https://web-three-delta-62.vercel.app/?view=strategy) |
+| Competitive Strategy | [Open](https://web-three-delta-62.vercel.app/?view=competitive) |
+| Export Pack | [Open](https://web-three-delta-62.vercel.app/?view=package) |
+| Admin Analytics | [Open](https://web-three-delta-62.vercel.app/?view=analytics) |
+| SLA Forecasting | [Open](https://web-three-delta-62.vercel.app/?view=sla) |
+| ROI Simulator | [Open](https://web-three-delta-62.vercel.app/?view=roi) |
+| Benchmark Mode | [Open](https://web-three-delta-62.vercel.app/?view=benchmark) |
+| Role Flow | [Open](https://web-three-delta-62.vercel.app/?view=flow) |
+| Governance | [Open](https://web-three-delta-62.vercel.app/?view=governance) |
+| AI Governance | [Open](https://web-three-delta-62.vercel.app/?view=ai-governance) |
+| Integrations | [Open](https://web-three-delta-62.vercel.app/?view=integrations) |
+| Automation | [Open](https://web-three-delta-62.vercel.app/?view=automation) |
+
+For local development, use the same `?view=` values with your local Vite URL, for example `http://localhost:5174?view=dashboard`.
 
 ## Quick Start
 
