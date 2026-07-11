@@ -1,6 +1,6 @@
-import { methodNotAllowed, optionsResponse, requestBody, sendJson, uploadedRun } from "../_bidforge";
+import { methodNotAllowed, optionsResponse, requestBody, sendJson, uploadedRun } from "../_bidforge.js";
 
-export default function handler(req: any, res: any) {
+export default function handler(req, res) {
   if (req.method === "OPTIONS") {
     return optionsResponse(res);
   }

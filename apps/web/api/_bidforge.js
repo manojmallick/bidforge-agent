@@ -1,41 +1,4 @@
-type JsonResponse = {
-  status: (code: number) => JsonResponse;
-  setHeader: (name: string, value: string) => void;
-  json: (body: unknown) => void;
-  end: () => void;
-};
-
-type JsonRequest = {
-  method?: string;
-  body?: unknown;
-};
-
-type AutomationConfig = {
-  id: string;
-  name: string;
-  status: "Active" | "Paused";
-  frequencyMinutes: number;
-  nextRunIn: string;
-  lastRunAt: string;
-  runMode: string;
-  trigger: string;
-  guarded: boolean;
-  owner: string;
-  nextRunAt: string;
-};
-
-type AutomationRunRecord = {
-  id: string;
-  status: string;
-  startedAt: string;
-  finishedAt: string;
-  summary: string;
-  changedArtifacts: string[];
-};
-
-type DemoRun = typeof bidForgeDemoRun;
-
-const bidForgeDemoRun = {
+export const bidForgeDemoRun = {
   runId: "RFP-742-B",
   buyer: "Apex Global Bank",
   project: "Managed cloud migration and application modernization",
@@ -170,76 +133,50 @@ const bidForgeDemoRun = {
     nextRunAt: ""
   },
   automationHistory: [
-    {
-      id: "auto-run-003",
-      status: "Completed",
-      startedAt: "Just now",
-      finishedAt: "Just now",
-      summary: "Refreshed extraction, risk register, SME tasks, and judge report.",
-      changedArtifacts: ["Risk register", "SME task board", "Judge report"]
-    },
-    {
-      id: "auto-run-002",
-      status: "Completed",
-      startedAt: "5 min ago",
-      finishedAt: "5 min ago",
-      summary: "No new unsupported claims detected. Legal approval gate remains open.",
-      changedArtifacts: ["Judge report"]
-    },
-    {
-      id: "auto-run-001",
-      status: "Completed",
-      startedAt: "10 min ago",
-      finishedAt: "10 min ago",
-      summary: "Prompt-injection marker quarantined and excluded from proposal generation.",
-      changedArtifacts: ["Guardrail log", "Timeline"]
-    }
+    { id: "auto-run-003", status: "Completed", startedAt: "Just now", finishedAt: "Just now", summary: "Refreshed extraction, risk register, SME tasks, and judge report.", changedArtifacts: ["Risk register", "SME task board", "Judge report"] },
+    { id: "auto-run-002", status: "Completed", startedAt: "5 min ago", finishedAt: "5 min ago", summary: "No new unsupported claims detected. Legal approval gate remains open.", changedArtifacts: ["Judge report"] },
+    { id: "auto-run-001", status: "Completed", startedAt: "10 min ago", finishedAt: "10 min ago", summary: "Prompt-injection marker quarantined and excluded from proposal generation.", changedArtifacts: ["Guardrail log", "Timeline"] }
   ],
   auditTrail: [
-    {
-      id: "audit-001",
-      actor: "System",
-      action: "Demo run loaded",
-      target: "RFP-742-B",
-      timestamp: "Just now",
-      outcome: "Completed",
-      detail: "Loaded deterministic demo run with automation guardrails enabled."
-    }
+    { id: "audit-001", actor: "System", action: "Demo run loaded", target: "RFP-742-B", timestamp: "Just now", outcome: "Completed", detail: "Loaded deterministic demo run with automation guardrails enabled." }
   ]
 };
 
-export function sendJson(res: JsonResponse, statusCode: number, payload: unknown) {
+export function sendJson(res, statusCode, payload) {
+  res.statusCode = statusCode;
+  res.setHeader("content-type", "application/json; charset=utf-8");
   res.setHeader("cache-control", "no-store");
-  res.status(statusCode).json(payload);
+  res.end(JSON.stringify(payload));
 }
 
-export function methodNotAllowed(res: JsonResponse, methods: string[]) {
+export function methodNotAllowed(res, methods) {
   res.setHeader("allow", methods.join(", "));
   sendJson(res, 405, { error: "method_not_allowed", message: `Use ${methods.join(" or ")}.` });
 }
 
-export function optionsResponse(res: JsonResponse) {
-  res.status(204).end();
+export function optionsResponse(res) {
+  res.statusCode = 204;
+  res.end();
 }
 
-export function requestBody(req: JsonRequest): Record<string, unknown> {
+export function requestBody(req) {
   if (!req.body) {
     return {};
   }
   if (typeof req.body === "string") {
     try {
-      return JSON.parse(req.body) as Record<string, unknown>;
+      return JSON.parse(req.body);
     } catch {
       return {};
     }
   }
   if (typeof req.body === "object") {
-    return req.body as Record<string, unknown>;
+    return req.body;
   }
   return {};
 }
 
-export function demoRun(overrides: Partial<DemoRun> = {}): DemoRun {
+export function demoRun(overrides = {}) {
   return {
     ...bidForgeDemoRun,
     ...overrides,
@@ -250,7 +187,7 @@ export function demoRun(overrides: Partial<DemoRun> = {}): DemoRun {
   };
 }
 
-export function automationState(overrides: Partial<AutomationConfig> = {}) {
+export function automationState(overrides = {}) {
   return {
     ...bidForgeDemoRun.automation,
     ...overrides,
@@ -259,7 +196,7 @@ export function automationState(overrides: Partial<AutomationConfig> = {}) {
   };
 }
 
-export function runRecord(source = "Manual"): AutomationRunRecord {
+export function runRecord(source = "Manual") {
   return {
     id: `auto-run-${Date.now()}`,
     status: "Completed",
@@ -270,7 +207,7 @@ export function runRecord(source = "Manual"): AutomationRunRecord {
   };
 }
 
-export function uploadedRun(payload: Record<string, unknown>) {
+export function uploadedRun(payload) {
   const file = typeof payload.file === "string" && payload.file.trim() ? payload.file : "Uploaded RFP";
   const rfpText = typeof payload.rfpText === "string" ? payload.rfpText : "";
   const requirementCount = Math.max(6, Math.min(84, Math.round(rfpText.split(/\bmust\b|\bshall\b|\bshould\b/i).length + 5)));

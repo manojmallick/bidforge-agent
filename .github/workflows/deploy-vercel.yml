@@ -46,6 +46,9 @@ jobs:
       - name: Typecheck Vercel API routes
         run: npm run typecheck:web-api
 
+      - name: Smoke test Vercel API routes
+        run: npm run test:web-api
+
       - name: Install Vercel CLI
         if: ${{ env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != '' }}
         run: npm install --global vercel@latest
