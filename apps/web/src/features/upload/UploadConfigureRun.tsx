@@ -13,6 +13,8 @@ type UploadConfigureRunProps = {
 export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps) {
   const [fileName, setFileName] = useState(run.upload.file);
   const [rfpText, setRfpText] = useState(sampleRfpText(run));
+  const [uploadStatus, setUploadStatus] = useState("Upload .pdf, .txt, or .md files. PDF text is extracted before review.");
+  const [isExtracting, setIsExtracting] = useState(false);
 
   return (
     <section className="panel" id="upload">
@@ -20,7 +22,11 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
         icon={<UploadCloud size={18} />}
         title="Upload & Configure Run"
         action="Run balanced review"
-        onAction={() => onCreateRun({ fileName, rfpText })}
+        onAction={() => {
+          if (!isExtracting) {
+            onCreateRun({ fileName, rfpText });
+          }
+        }}
       />
       <div className="uploadZone">
         <UploadCloud size={24} />
@@ -34,7 +40,7 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
         <FileText size={16} />
         <span>{fileName}</span>
         <input
-          accept=".txt,.md,.text"
+          accept=".pdf,.txt,.md,.text,application/pdf,text/plain,text/markdown"
           type="file"
           onChange={async (event) => {
             const file = event.target.files?.[0];
@@ -42,13 +48,34 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
               return;
             }
             setFileName(file.name);
-            setRfpText(await file.text());
+            setIsExtracting(true);
+            setUploadStatus(`Reading ${file.name}...`);
+            try {
+              const extractedText = await extractDocumentText(file);
+              setRfpText(extractedText);
+              setUploadStatus(uploadSuccessMessage(file, extractedText));
+            } catch (error) {
+              setRfpText("");
+              setUploadStatus(error instanceof Error ? error.message : "Could not read this document.");
+            } finally {
+              setIsExtracting(false);
+              event.target.value = "";
+            }
           }}
         />
       </label>
+      <p className={uploadStatus.startsWith("Could not") || uploadStatus.startsWith("This PDF") ? "uploadStatus warning" : "uploadStatus"}>
+        {uploadStatus}
+      </p>
       <label className="rfpTextInput">
         <span>RFP text</span>
-        <textarea value={rfpText} onChange={(event) => setRfpText(event.target.value)} />
+        <textarea
+          value={rfpText}
+          onChange={(event) => {
+            setRfpText(event.target.value);
+            setUploadStatus("RFP text edited manually.");
+          }}
+        />
       </label>
       <div className="configRow">
         <SelectLike label="Buyer" value={run.buyer} />
@@ -58,6 +85,58 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
       </div>
     </section>
   );
+}
+
+async function extractDocumentText(file: File) {
+  if (isPdf(file)) {
+    return extractPdfText(file);
+  }
+  return file.text();
+}
+
+function isPdf(file: File) {
+  return file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+}
+
+async function extractPdfText(file: File) {
+  const [pdfjsLib, worker] = await Promise.all([
+    import("pdfjs-dist"),
+    import("pdfjs-dist/build/pdf.worker.mjs?url")
+  ]);
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = worker.default;
+
+  const data = new Uint8Array(await file.arrayBuffer());
+  const pdf = await pdfjsLib.getDocument({ data }).promise;
+  const pages: string[] = [];
+
+  for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+    const page = await pdf.getPage(pageNumber);
+    const content = await page.getTextContent();
+    const pageText = content.items
+      .map((item) => ("str" in item ? item.str : ""))
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (pageText) {
+      pages.push(`Page ${pageNumber}\n${pageText}`);
+    }
+  }
+
+  const text = pages.join("\n\n").trim();
+  if (!text) {
+    throw new Error("This PDF did not contain extractable text. Try a text-based PDF or paste the RFP text manually.");
+  }
+  return text;
+}
+
+function uploadSuccessMessage(file: File, extractedText: string) {
+  const words = extractedText.split(/\s+/).filter(Boolean).length;
+  if (isPdf(file)) {
+    return `PDF extracted successfully: ${words.toLocaleString()} words ready for balanced review.`;
+  }
+  return `Document loaded successfully: ${words.toLocaleString()} words ready for balanced review.`;
 }
 
 function SelectLike({ label, value }: { label: string; value: string }) {

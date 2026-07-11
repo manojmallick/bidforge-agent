@@ -32,7 +32,7 @@ BidForge is designed around what hackathon judges usually reward:
 
 | Area | What Works |
 | --- | --- |
-| Upload | Paste or select RFP text, run balanced review, trigger automation refresh |
+| Upload | Paste RFP text or upload `.pdf`, `.txt`, or `.md`, run balanced review, trigger automation refresh |
 | Dashboard | Run summary, quality score, token/latency, hours saved, agent timeline |
 | Compliance Matrix | Extracted requirements, category, priority, evidence, owner, confidence |
 | Proposal Draft | Generated proposal sections with unsupported claims marked |
@@ -174,6 +174,12 @@ Open:
 
 ```text
 http://localhost:5174
+```
+
+Sample upload PDF:
+
+```text
+docs/sample-rfps/Northwind_Bank_Core_Banking_Cloud_Migration_RFP.pdf
 ```
 
 ## Validation
