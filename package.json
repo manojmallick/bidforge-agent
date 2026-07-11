@@ -9,6 +9,7 @@
     "demo": "sh scripts/demo.sh",
     "dev:web": "npm --workspace apps/web run dev",
     "build:web": "npm --workspace apps/web run build",
+    "typecheck:web-api": "npm --workspace apps/web run typecheck:api",
     "dev:api": "cd services/api && PYTHONPATH=. python3 app/main.py",
     "test:api": "cd services/api && PYTHONPATH=. python3 -m unittest discover -s tests"
   }

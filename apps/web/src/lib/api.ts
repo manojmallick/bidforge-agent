@@ -1,7 +1,7 @@
 import { bidForgeDemoRun } from "../data/bidforgeDemoRun";
 import type { AuditEvent, AutomationConfig, AutomationRunRecord, AutomationState, BidForgeRun } from "../types/bidforge";
 
-const API_BASE = import.meta.env.VITE_BIDFORGE_API_BASE ?? "http://127.0.0.1:8787";
+const API_BASE = import.meta.env.VITE_BIDFORGE_API_BASE ?? (import.meta.env.PROD ? "" : "http://127.0.0.1:8787");
 
 export async function fetchDemoRun(): Promise<BidForgeRun> {
   try {
