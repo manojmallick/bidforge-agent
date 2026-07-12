@@ -66,7 +66,7 @@ export function AppShell({
   return (
     <div className="appShell">
       <aside className="sidebar">
-        <div className="brand"><strong>BidForge Agent</strong><span>Enterprise RFP</span></div>
+        <div className="brand"><strong>BidForge Agent</strong><span>Enterprise Request for Proposal</span></div>
         <nav className="navList" aria-label="Primary">
           {navItems.map(({ label, icon: Icon, view }) => (
             <a
@@ -100,7 +100,7 @@ export function AppShell({
             <div><Wrench size={22} /><strong>BidForge Agent</strong></div>
             <button aria-label="Account" onClick={() => togglePopover("profile")}><UserCircle size={24} /></button>
           </div>
-          <div className="runIdentity"><strong>{run.runId}</strong><span>{run.status}</span><span>Due in {run.deadline}</span><span>Score {run.qualityScore}</span><span>{run.tokenCost}</span></div>
+          <div className="runIdentity"><strong>Request for Proposal · {run.runId}</strong><span>{run.status}</span><span>Due in {run.deadline}</span><span>Score {run.qualityScore}</span><span>{run.tokenCost}</span></div>
           <div className="topActions">
             <label className="searchBox">
               <Search size={16} />

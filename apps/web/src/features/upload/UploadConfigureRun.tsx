@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FileText, UploadCloud } from "lucide-react";
 import type { BidForgeRun } from "../../types/bidforge";
 import type { BidRunDraft } from "../../lib/api";
@@ -11,16 +11,17 @@ type UploadConfigureRunProps = {
 };
 
 export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState(run.upload.file);
   const [rfpText, setRfpText] = useState(sampleRfpText(run));
-  const [uploadStatus, setUploadStatus] = useState("Upload .pdf, .txt, or .md files. PDF text is extracted before review.");
+  const [uploadStatus, setUploadStatus] = useState("Upload a Request for Proposal PDF, TXT, or Markdown file. PDF text is extracted before review.");
   const [isExtracting, setIsExtracting] = useState(false);
 
   return (
     <section className="panel" id="upload">
       <PanelTitle
         icon={<UploadCloud size={18} />}
-        title="Upload & Configure Run"
+        title="Upload Request for Proposal"
         action="Run balanced review"
         onAction={() => {
           if (!isExtracting) {
@@ -36,44 +37,47 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
         </div>
         <Badge tone={run.upload.warning.includes("No prompt") ? "success" : "warning"}>{run.upload.warning}</Badge>
       </div>
-      <label className="filePicker">
+      <button className="filePicker" disabled={isExtracting} onClick={() => fileInputRef.current?.click()} type="button">
         <FileText size={16} />
-        <span>{fileName}</span>
-        <input
-          accept=".pdf,.txt,.md,.text,application/pdf,text/plain,text/markdown"
-          type="file"
-          onChange={async (event) => {
-            const file = event.target.files?.[0];
-            if (!file) {
-              return;
-            }
-            setFileName(file.name);
-            setIsExtracting(true);
-            setUploadStatus(`Reading ${file.name}...`);
-            try {
-              const extractedText = await extractDocumentText(file);
-              setRfpText(extractedText);
-              setUploadStatus(uploadSuccessMessage(file, extractedText));
-            } catch (error) {
-              setRfpText("");
-              setUploadStatus(error instanceof Error ? error.message : "Could not read this document.");
-            } finally {
-              setIsExtracting(false);
-              event.target.value = "";
-            }
-          }}
-        />
-      </label>
+        <span>{isExtracting ? `Reading ${fileName}...` : fileName}</span>
+      </button>
+      <input
+        accept=".pdf,.txt,.md,.text,application/pdf,text/plain,text/markdown"
+        aria-label="Upload Request for Proposal document"
+        className="hiddenFileInput"
+        ref={fileInputRef}
+        type="file"
+        onChange={async (event) => {
+          const file = event.target.files?.[0];
+          if (!file) {
+            return;
+          }
+          setFileName(file.name);
+          setIsExtracting(true);
+          setUploadStatus(`Reading ${file.name}...`);
+          try {
+            const extractedText = await extractDocumentText(file);
+            setRfpText(extractedText);
+            setUploadStatus(uploadSuccessMessage(file, extractedText));
+          } catch (error) {
+            setRfpText("");
+            setUploadStatus(error instanceof Error ? error.message : "Could not read this document.");
+          } finally {
+            setIsExtracting(false);
+            event.target.value = "";
+          }
+        }}
+      />
       <p className={uploadStatus.startsWith("Could not") || uploadStatus.startsWith("This PDF") ? "uploadStatus warning" : "uploadStatus"}>
         {uploadStatus}
       </p>
       <label className="rfpTextInput">
-        <span>RFP text</span>
+        <span>Request for Proposal text</span>
         <textarea
           value={rfpText}
           onChange={(event) => {
             setRfpText(event.target.value);
-            setUploadStatus("RFP text edited manually.");
+            setUploadStatus("Request for Proposal text edited manually.");
           }}
         />
       </label>
@@ -126,7 +130,7 @@ async function extractPdfText(file: File) {
 
   const text = pages.join("\n\n").trim();
   if (!text) {
-    throw new Error("This PDF did not contain extractable text. Try a text-based PDF or paste the RFP text manually.");
+    throw new Error("This PDF did not contain extractable text. Try a text-based PDF or paste the Request for Proposal text manually.");
   }
   return text;
 }

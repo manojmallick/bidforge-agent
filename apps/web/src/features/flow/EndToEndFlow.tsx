@@ -150,7 +150,7 @@ export function EndToEndFlow({ run, onCommand }: { run: BidForgeRun; onCommand: 
 
 function initialSteps(run: BidForgeRun): FlowStep[] {
   return [
-    { id: "intake", title: "Upload and configure RFP", owner: "Bid Manager", status: "Approved", artifact: `${run.upload.file} normalized with ${run.requirements} extracted requirements.`, gate: "Intake complete" },
+    { id: "intake", title: "Upload and configure Request for Proposal", owner: "Bid Manager", status: "Approved", artifact: `${run.upload.file} normalized with ${run.requirements} extracted requirements.`, gate: "Intake complete" },
     { id: "legal", title: "Legal compliance review", owner: "Legal", status: "Active", artifact: "EU data residency, contractual terms, and legal assumptions.", gate: "Legal approval" },
     { id: "finance", title: "Commercial and pricing review", owner: "Finance", status: "Waiting", artifact: "SLA penalties, fixed-price assumptions, and estimated bid economics.", gate: "Pricing approval" },
     { id: "security", title: "Security evidence review", owner: "Security", status: "Waiting", artifact: "Incident response control evidence and citation support.", gate: "Security approval" },

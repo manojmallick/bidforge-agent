@@ -128,7 +128,7 @@ function buildConnectors(run: BidForgeRun): Connector[] {
       owner: "Bid manager",
       status: "Connected",
       lastSync: "5 min ago",
-      mappedArtifacts: ["RFP source", "Evidence pack", "Proposal memo"],
+      mappedArtifacts: ["Request for Proposal source", "Evidence pack", "Proposal memo"],
       detail: `Maps ${run.upload.file} and approved evidence back to the proposal repository.`
     },
     {

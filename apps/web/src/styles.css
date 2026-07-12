@@ -788,10 +788,10 @@ td,
 }
 
 .filePicker {
-  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
   min-height: 38px;
   margin-top: 10px;
   padding: 0 10px;
@@ -800,9 +800,11 @@ td,
   color: var(--teal);
   background: #ffffff;
   cursor: pointer;
+  text-align: left;
 }
 
 .filePicker span {
+  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -812,11 +814,13 @@ td,
   font-weight: 700;
 }
 
-.filePicker input {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
+.filePicker:disabled {
+  cursor: wait;
+  opacity: 0.74;
+}
+
+.hiddenFileInput {
+  display: none;
 }
 
 .uploadStatus {

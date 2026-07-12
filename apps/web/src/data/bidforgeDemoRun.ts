@@ -67,7 +67,7 @@ export const bidForgeDemoRun: BidForgeRun = {
     warning: "1 prompt-injection pattern quarantined as document content"
   },
   timeline: [
-    { agent: "Intake Agent", state: "Done", note: "RFP normalized, metadata extracted" },
+    { agent: "Intake Agent", state: "Done", note: "Request for Proposal normalized, metadata extracted" },
     { agent: "Requirement Agent", state: "Done", note: "84 requirements with citations" },
     { agent: "Capability Agent", state: "Done", note: "63 evidence-backed matches" },
     { agent: "Proposal Writer", state: "Active", note: "Drafting security and delivery sections" },
@@ -123,7 +123,7 @@ export const bidForgeDemoRun: BidForgeRun = {
   },
   automation: {
     id: "auto-rfp-742-b",
-    name: "Apex RFP auto-refresh",
+    name: "Apex Request for Proposal auto-refresh",
     status: "Active",
     frequencyMinutes: 5,
     nextRunIn: "5 min",

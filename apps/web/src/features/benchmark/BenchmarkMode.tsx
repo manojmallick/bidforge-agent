@@ -6,7 +6,7 @@ import { PanelTitle } from "../../components/ui/PanelTitle";
 
 const benchmarkCases = [
   {
-    name: "Banking migration RFP",
+    name: "Banking migration Request for Proposal",
     requirements: 84,
     manualCoverage: 62,
     agentCoverage: 92,
@@ -15,7 +15,7 @@ const benchmarkCases = [
     citationSupport: 86,
   },
   {
-    name: "Retail DevSecOps RFP",
+    name: "Retail DevSecOps Request for Proposal",
     requirements: 47,
     manualCoverage: 68,
     agentCoverage: 91,
@@ -24,7 +24,7 @@ const benchmarkCases = [
     citationSupport: 82,
   },
   {
-    name: "Insurance data platform RFP",
+    name: "Insurance data platform Request for Proposal",
     requirements: 63,
     manualCoverage: 65,
     agentCoverage: 89,

@@ -164,7 +164,7 @@ function buildControls(run: BidForgeRun, summary: AiGovernancePayload["summary"]
       status: run.upload.warning ? "Pass" : "Watch",
       owner: "System",
       evidence: run.upload.warning || "No quarantine event detected",
-      detail: "RFP text that tries to override system behavior is treated as document content."
+      detail: "Request for Proposal text that tries to override system behavior is treated as document content."
     },
     {
       label: "Citation discipline",

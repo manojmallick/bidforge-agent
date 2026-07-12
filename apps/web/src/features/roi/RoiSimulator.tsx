@@ -53,7 +53,7 @@ export function RoiSimulator({ run, onExport }: { run: BidForgeRun; onExport: (p
       </div>
 
       <div className="roiControls">
-        <RoiInput icon={<Clock size={16} />} label="RFP pages" value={pages} min={1} max={300} onChange={setPages} />
+        <RoiInput icon={<Clock size={16} />} label="Request for Proposal pages" value={pages} min={1} max={300} onChange={setPages} />
         <RoiInput icon={<Clock size={16} />} label="Reviewers" value={reviewers} min={1} max={20} onChange={setReviewers} />
         <RoiInput icon={<Clock size={16} />} label="Manual hours / reviewer" value={hoursPerReviewer} min={1} max={80} onChange={setHoursPerReviewer} />
         <RoiInput icon={<DollarSign size={16} />} label="Blended hourly rate" value={hourlyRate} min={25} max={250} onChange={setHourlyRate} />

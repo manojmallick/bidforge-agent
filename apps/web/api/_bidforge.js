@@ -65,7 +65,7 @@ export const bidForgeDemoRun = {
     warning: "1 prompt-injection pattern quarantined as document content"
   },
   timeline: [
-    { agent: "Intake Agent", state: "Done", note: "RFP normalized, metadata extracted" },
+    { agent: "Intake Agent", state: "Done", note: "Request for Proposal normalized, metadata extracted" },
     { agent: "Requirement Agent", state: "Done", note: "84 requirements with citations" },
     { agent: "Capability Agent", state: "Done", note: "63 evidence-backed matches" },
     { agent: "Proposal Writer", state: "Active", note: "Drafting security and delivery sections" },
@@ -121,7 +121,7 @@ export const bidForgeDemoRun = {
   },
   automation: {
     id: "auto-rfp-742-b",
-    name: "Apex RFP auto-refresh",
+    name: "Apex Request for Proposal auto-refresh",
     status: "Active",
     frequencyMinutes: 5,
     nextRunIn: "5 min",
@@ -208,7 +208,7 @@ export function runRecord(source = "Manual") {
 }
 
 export function uploadedRun(payload) {
-  const file = typeof payload.file === "string" && payload.file.trim() ? payload.file : "Uploaded RFP";
+  const file = typeof payload.file === "string" && payload.file.trim() ? payload.file : "Uploaded Request for Proposal";
   const rfpText = typeof payload.rfpText === "string" ? payload.rfpText : "";
   const requirementCount = Math.max(6, Math.min(84, Math.round(rfpText.split(/\bmust\b|\bshall\b|\bshould\b/i).length + 5)));
   const record = runRecord("Upload-triggered");
