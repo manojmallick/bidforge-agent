@@ -210,33 +210,158 @@ export function runRecord(source = "Manual") {
 export function uploadedRun(payload) {
   const file = typeof payload.file === "string" && payload.file.trim() ? payload.file : "Uploaded Request for Proposal";
   const rfpText = typeof payload.rfpText === "string" ? payload.rfpText : "";
+  const metadata = documentMetadata(file, rfpText, payload.metadata);
   const requirementCount = Math.max(6, Math.min(84, Math.round(rfpText.split(/\bmust\b|\bshall\b|\bshould\b/i).length + 5)));
   const record = runRecord("Upload-triggered");
 
   return demoRun({
+    runId: metadata.runId,
+    buyer: metadata.buyer,
+    project: metadata.project,
     status: "Automation refresh complete",
+    deadline: metadata.deadline,
     requirements: requirementCount,
+    executiveBrief: {
+      ...bidForgeDemoRun.executiveBrief,
+      opportunitySummary: `${metadata.buyer} needs a governed response for ${metadata.project.toLowerCase()} with traceable requirements, risk controls, and reviewer-ready evidence.`,
+      bidRecommendation: `Proceed with controlled bid response for ${metadata.buyer} after required legal, finance, delivery, and security approvals.`
+    },
     upload: {
       ...bidForgeDemoRun.upload,
       file,
-      size: rfpText ? `${Math.max(1, Math.ceil(rfpText.length / 2600))} page text extract` : "Uploaded document",
-      warning: rfpText.toLowerCase().includes("ignore previous instructions")
-        ? "Prompt-injection pattern quarantined as document content"
-        : "No prompt-injection pattern detected"
+      knowledgeBase: metadata.knowledgeBase,
+      estimatedCost: metadata.estimatedCost,
+      estimatedTime: metadata.estimatedTime,
+      size: metadata.size,
+      warning: metadata.warning
     },
-    automation: { ...bidForgeDemoRun.automation, lastRunAt: "Just now", nextRunIn: "5 min" },
+    automation: { ...bidForgeDemoRun.automation, name: `${metadata.buyer} Request for Proposal auto-refresh`, lastRunAt: "Just now", nextRunIn: "5 min" },
     automationHistory: [record, ...bidForgeDemoRun.automationHistory],
     auditTrail: [
       {
         id: "audit-vercel-upload",
         actor: "Senior Bid Mgr",
         action: "Created bid run",
-        target: bidForgeDemoRun.runId,
+        target: metadata.runId,
         timestamp: "Just now",
         outcome: "Completed",
-        detail: `Started balanced review from ${file}; Vercel API refresh executed with guardrails active.`
+        detail: `Started balanced review for ${metadata.buyer} from ${file}; Vercel API refresh executed with guardrails active.`
       },
       ...bidForgeDemoRun.auditTrail
     ]
   });
+}
+
+function documentMetadata(fileName, text, payloadMetadata = {}) {
+  const fallback = typeof payloadMetadata === "object" && payloadMetadata ? payloadMetadata : {};
+  const normalizedText = text.replace(/\s+/g, " ").trim();
+  const titleLine = firstTitleLine(text);
+  const buyer = cleanValue(
+    matchText(text, /Buyer:\s*([^\n|]+)/i) ??
+    matchText(titleLine, /^(.+?)\s+Request for Proposal:/i) ??
+    fallback.buyer ??
+    bidForgeDemoRun.buyer
+  );
+  const project = cleanValue(
+    matchText(titleLine, /Request for Proposal:\s*(.+?)(?:\s+RFP ID:|\s+\|\s+Issue date:|$)/i) ??
+    matchText(text, /Project:\s*([^\n|]+)/i) ??
+    fallback.project ??
+    bidForgeDemoRun.project
+  );
+  const runId = cleanValue(
+    matchText(normalizedText, /RFP ID:\s*([A-Z0-9-]+)/i) ??
+    matchText(normalizedText, /Request for Proposal ID:\s*([A-Z0-9-]+)/i) ??
+    fallback.runId ??
+    fileName.replace(/\.[^.]+$/, "").replace(/[^A-Z0-9]+/gi, "-").replace(/^-|-$/g, "").toUpperCase()
+  );
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const lowerText = normalizedText.toLowerCase();
+
+  return {
+    buyer,
+    project,
+    runId,
+    deadline: deadlineFromText(normalizedText) ?? fallback.deadline ?? bidForgeDemoRun.deadline,
+    knowledgeBase: knowledgeBaseForDocument(`${buyer} ${project} ${normalizedText}`) ?? fallback.knowledgeBase ?? bidForgeDemoRun.upload.knowledgeBase,
+    estimatedCost: estimateCost(words),
+    estimatedTime: estimateTime(words),
+    size: text ? `${pageCountFromText(text)} page${pageCountFromText(text) === 1 ? "" : "s"} text extract` : fallback.size ?? "Uploaded document",
+    warning: lowerText.includes("ignore previous instructions")
+      ? "Prompt-injection pattern quarantined as document content"
+      : fallback.warning ?? "No prompt-injection pattern detected"
+  };
+}
+
+function firstTitleLine(text) {
+  return text
+    .split(/\n+/)
+    .map((line) => line.trim().replace(/^Page\s+\d+\s+/i, ""))
+    .find((line) => /Request for Proposal:/i.test(line)) ?? text.replace(/\s+/g, " ").trim();
+}
+
+function matchText(value, pattern) {
+  return pattern.exec(value)?.[1];
+}
+
+function cleanValue(value) {
+  return String(value)
+    .replace(/^Page\s+\d+\s+/i, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s+RFP ID:.*$/i, "")
+    .trim();
+}
+
+function deadlineFromText(text) {
+  const calendarDays = /Response due:\s*(\d+)\s+calendar\s+days/i.exec(text)?.[1];
+  if (calendarDays) {
+    return `${calendarDays} days`;
+  }
+  return matchText(text, /Response due:\s*([^.|]+?)(?:\s+\d+\.|$)/i)?.trim();
+}
+
+function pageCountFromText(text) {
+  const matches = Array.from(text.matchAll(/Page\s+(\d+)/gi), (match) => Number(match[1]));
+  const maxPage = Math.max(0, ...matches.filter(Number.isFinite));
+  if (maxPage > 0) {
+    return maxPage;
+  }
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 350));
+}
+
+function knowledgeBaseForDocument(value) {
+  const lowerValue = value.toLowerCase();
+  if (lowerValue.includes("bank") || lowerValue.includes("banking")) {
+    return "Banking cloud migration evidence";
+  }
+  if (lowerValue.includes("retail")) {
+    return "Retail transformation evidence";
+  }
+  if (lowerValue.includes("insurance")) {
+    return "Insurance delivery evidence";
+  }
+  if (lowerValue.includes("security") || lowerValue.includes("iso")) {
+    return "Security and compliance evidence";
+  }
+  return undefined;
+}
+
+function estimateCost(words) {
+  if (words > 4000) {
+    return "$14-$20";
+  }
+  if (words > 1200) {
+    return "$10-$15";
+  }
+  return "$7-$11";
+}
+
+function estimateTime(words) {
+  if (words > 4000) {
+    return "5-8 min";
+  }
+  if (words > 1200) {
+    return "3-5 min";
+  }
+  return "2-4 min";
 }

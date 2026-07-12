@@ -706,11 +706,12 @@ td,
 .configRow {
   gap: 10px;
   margin-top: 12px;
+  flex-wrap: wrap;
 }
 
 .selectLike {
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 180px;
+  min-width: 160px;
   display: grid;
   gap: 4px;
   padding: 10px 12px;
@@ -721,9 +722,9 @@ td,
 
 .selectLike strong {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
   font-size: 13px;
+  line-height: 17px;
 }
 
 .costStrip {

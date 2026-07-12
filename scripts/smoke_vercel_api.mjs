@@ -40,12 +40,20 @@ const upload = invoke(createRun, {
   method: "POST",
   body: {
     file: "Northwind_Bank_Core_Banking_Cloud_Migration_RFP.pdf",
-    rfpText: "Vendor must provide 24x7 support. Supplier shall comply with EU data residency."
+    rfpText: [
+      "Page 1",
+      "Northwind Bank Request for Proposal: Core Banking Cloud Migration and Managed Operations RFP ID: NWB-CLOUD-2026-001 | Issue date: July 2026 | Response due: 14 calendar days from issue",
+      "Vendor must provide 24x7 support. Supplier shall comply with EU data residency."
+    ].join("\n")
   }
 });
 assert.equal(upload.statusCode, 201);
 assert.equal(upload.json.status, "Automation refresh complete");
+assert.equal(upload.json.runId, "NWB-CLOUD-2026-001");
+assert.equal(upload.json.buyer, "Northwind Bank");
+assert.equal(upload.json.project, "Core Banking Cloud Migration and Managed Operations");
 assert.equal(upload.json.upload.file, "Northwind_Bank_Core_Banking_Cloud_Migration_RFP.pdf");
+assert.equal(upload.json.upload.knowledgeBase, "Banking cloud migration evidence");
 assert.ok(upload.json.automationHistory.length > demo.json.automationHistory.length);
 
 const current = invoke(currentAutomation, { method: "GET" });

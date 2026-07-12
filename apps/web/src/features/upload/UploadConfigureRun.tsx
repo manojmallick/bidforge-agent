@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { FileText, UploadCloud } from "lucide-react";
 import type { BidForgeRun } from "../../types/bidforge";
 import type { BidRunDraft } from "../../lib/api";
+import { deriveDocumentMetadata, type DocumentMetadata } from "../../lib/documentMetadata";
 import { Badge } from "../../components/ui/Badge";
 import { PanelTitle } from "../../components/ui/PanelTitle";
 
@@ -12,8 +13,10 @@ type UploadConfigureRunProps = {
 
 export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const initialText = sampleRfpText(run);
   const [fileName, setFileName] = useState(run.upload.file);
-  const [rfpText, setRfpText] = useState(sampleRfpText(run));
+  const [rfpText, setRfpText] = useState(initialText);
+  const [metadata, setMetadata] = useState<DocumentMetadata>(() => metadataFromRun(run));
   const [uploadStatus, setUploadStatus] = useState("Upload a Request for Proposal PDF, TXT, or Markdown file. PDF text is extracted before review.");
   const [isExtracting, setIsExtracting] = useState(false);
 
@@ -25,7 +28,7 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
         action="Run balanced review"
         onAction={() => {
           if (!isExtracting) {
-            onCreateRun({ fileName, rfpText });
+            onCreateRun({ fileName, metadata, rfpText });
           }
         }}
       />
@@ -33,9 +36,9 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
         <UploadCloud size={24} />
         <div>
           <strong>{fileName}</strong>
-          <span>{run.upload.size} · {run.upload.knowledgeBase}</span>
+          <span>{metadata.size} · {metadata.knowledgeBase}</span>
         </div>
-        <Badge tone={run.upload.warning.includes("No prompt") ? "success" : "warning"}>{run.upload.warning}</Badge>
+        <Badge tone={metadata.warning.includes("No prompt") ? "success" : "warning"}>{metadata.warning}</Badge>
       </div>
       <button className="filePicker" disabled={isExtracting} onClick={() => fileInputRef.current?.click()} type="button">
         <FileText size={16} />
@@ -57,6 +60,8 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
           setUploadStatus(`Reading ${file.name}...`);
           try {
             const extractedText = await extractDocumentText(file);
+            const nextMetadata = deriveDocumentMetadata(file.name, extractedText, metadata);
+            setMetadata(nextMetadata);
             setRfpText(extractedText);
             setUploadStatus(uploadSuccessMessage(file, extractedText));
           } catch (error) {
@@ -76,16 +81,19 @@ export function UploadConfigureRun({ run, onCreateRun }: UploadConfigureRunProps
         <textarea
           value={rfpText}
           onChange={(event) => {
-            setRfpText(event.target.value);
+            const nextText = event.target.value;
+            setRfpText(nextText);
+            setMetadata(deriveDocumentMetadata(fileName, nextText, metadata));
             setUploadStatus("Request for Proposal text edited manually.");
           }}
         />
       </label>
       <div className="configRow">
-        <SelectLike label="Buyer" value={run.buyer} />
-        <SelectLike label="Knowledge base" value={run.upload.knowledgeBase} />
-        <SelectLike label="Run mode" value={run.upload.selectedMode} />
-        <SelectLike label="Estimate" value={`${run.upload.estimatedCost} / ${run.upload.estimatedTime}`} />
+        <SelectLike label="Buyer" value={metadata.buyer} />
+        <SelectLike label="Project" value={metadata.project} />
+        <SelectLike label="Request ID" value={metadata.runId} />
+        <SelectLike label="Knowledge base" value={metadata.knowledgeBase} />
+        <SelectLike label="Estimate" value={`${metadata.estimatedCost} / ${metadata.estimatedTime}`} />
       </div>
     </section>
   );
@@ -160,4 +168,18 @@ function sampleRfpText(run: BidForgeRun) {
     "Supplier shall comply with EU data residency.",
     "Provider must include security incident response process."
   ].join("\n");
+}
+
+function metadataFromRun(run: BidForgeRun): DocumentMetadata {
+  return {
+    buyer: run.buyer,
+    project: run.project,
+    runId: run.runId,
+    deadline: run.deadline,
+    knowledgeBase: run.upload.knowledgeBase,
+    estimatedCost: run.upload.estimatedCost,
+    estimatedTime: run.upload.estimatedTime,
+    size: run.upload.size,
+    warning: run.upload.warning
+  };
 }

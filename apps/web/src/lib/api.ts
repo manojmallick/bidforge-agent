@@ -1,5 +1,6 @@
 import { bidForgeDemoRun } from "../data/bidforgeDemoRun";
 import type { AuditEvent, AutomationConfig, AutomationRunRecord, AutomationState, BidForgeRun } from "../types/bidforge";
+import { deriveDocumentMetadata, type DocumentMetadata } from "./documentMetadata";
 
 const API_BASE = import.meta.env.VITE_BIDFORGE_API_BASE ?? (import.meta.env.PROD ? "" : "http://127.0.0.1:8787");
 
@@ -17,12 +18,14 @@ export async function fetchDemoRun(): Promise<BidForgeRun> {
 
 export type BidRunDraft = {
   fileName: string;
+  metadata?: DocumentMetadata;
   rfpText: string;
 };
 
 export async function createBidRun(run: BidForgeRun, draft?: BidRunDraft): Promise<BidForgeRun> {
   const fileName = draft?.fileName || run.upload.file;
   const rfpText = draft?.rfpText || `${run.buyer} ${run.project}`;
+  const metadata = draft?.metadata ?? deriveDocumentMetadata(fileName, rfpText, metadataFromRun(run));
   try {
     const response = await fetch(`${API_BASE}/api/runs`, {
       method: "POST",
@@ -31,6 +34,7 @@ export async function createBidRun(run: BidForgeRun, draft?: BidRunDraft): Promi
         actor: "Senior Bid Mgr",
         role: "bid_manager",
         file: fileName,
+        metadata,
         rfpText
       })
     });
@@ -49,23 +53,55 @@ export async function createBidRun(run: BidForgeRun, draft?: BidRunDraft): Promi
     };
     return {
       ...run,
+      runId: metadata.runId,
+      buyer: metadata.buyer,
+      project: metadata.project,
       status: "Automation refresh complete",
-      automation: { ...run.automation, lastRunAt: "Just now", nextRunIn: `${run.automation.frequencyMinutes} min` },
+      deadline: metadata.deadline,
+      upload: {
+        ...run.upload,
+        file: fileName,
+        knowledgeBase: metadata.knowledgeBase,
+        estimatedCost: metadata.estimatedCost,
+        estimatedTime: metadata.estimatedTime,
+        size: metadata.size,
+        warning: metadata.warning
+      },
+      automation: {
+        ...run.automation,
+        name: `${metadata.buyer} Request for Proposal auto-refresh`,
+        lastRunAt: "Just now",
+        nextRunIn: `${run.automation.frequencyMinutes} min`
+      },
       automationHistory: [runRecord, ...run.automationHistory],
       auditTrail: [
         {
           id: "audit-upload-local",
           actor: "Senior Bid Mgr",
           action: "Created bid run",
-          target: run.runId,
+          target: metadata.runId,
           timestamp: "Just now",
           outcome: "Completed",
-          detail: `Started balanced review from ${fileName}; automation refresh executed with guardrails active.`
+          detail: `Started balanced review for ${metadata.buyer} from ${fileName}; automation refresh executed with guardrails active.`
         },
         ...run.auditTrail
       ]
     };
   }
+}
+
+function metadataFromRun(run: BidForgeRun): DocumentMetadata {
+  return {
+    buyer: run.buyer,
+    project: run.project,
+    runId: run.runId,
+    deadline: run.deadline,
+    knowledgeBase: run.upload.knowledgeBase,
+    estimatedCost: run.upload.estimatedCost,
+    estimatedTime: run.upload.estimatedTime,
+    size: run.upload.size,
+    warning: run.upload.warning
+  };
 }
 
 export async function fetchAutomationConfig(): Promise<AutomationState> {
